@@ -142,7 +142,6 @@ public class Layout {
 								paragraph.addLine(line);
 							}
 						}
-
 					} else {
 						i--;
 					}
