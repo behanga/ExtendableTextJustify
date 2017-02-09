@@ -18,9 +18,7 @@ public class Line extends Element {
 	public float remainedWidth;
 
 
-	public Line(float top, float left, float width, float height) {
-		this.top = top;
-		this.left = left;
+	public Line(float width, float height) {
 		this.width = width;
 		this.height = height;
 		this.remainedWidth = width;

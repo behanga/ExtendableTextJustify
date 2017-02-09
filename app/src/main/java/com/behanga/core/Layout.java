@@ -2,7 +2,6 @@ package com.behanga.core;
 
 
 import android.graphics.Paint;
-import android.graphics.Rect;
 
 import com.behanga.element.Block;
 import com.behanga.element.Line;
@@ -11,7 +10,6 @@ import com.behanga.element.Span;
 import com.behanga.element.TextSpan;
 import com.behanga.hyphenation.Hyphenator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,9 +22,6 @@ public class Layout {
 	private Paint mPaint;
 	private int mTextHeight;
 	private Hyphenator mHyphenator;
-	private float mCurLeft; //加入line之后左边的位置
-	private Rect mRect1 = new Rect();
-	private Rect mRect2 = new Rect();
 
 
 	public Layout() {
@@ -93,26 +88,19 @@ public class Layout {
 
 	private Paragraph measureEn(String source, List<Block> blocks) {
 		int hyphenWidth = (int) mPaint.measureText("-");
-		float curLineBottom = 0;
-		List<Line> lines = new ArrayList<>();
 		String[] words = source.split("\\s");
-		Line line = null;
+		Paragraph paragraph = new Paragraph(mWidth);
+		if (blocks != null) {
+			paragraph.blocks.addAll(blocks);
+		}
+
+		Line line = new Line(mWidth, mTextHeight);//第一行
+		paragraph.addLine(line);
 
 		for (int i = 0; i < words.length; i++) {
-			if (line == null) {
-				line = new Line(0, 0, mWidth, mTextHeight);
-				lines.add(line);
-				if (blocks != null) {
-					calLineWidth(line, blocks);//第一行
-					mCurLeft = line.left + line.width;
-				} else {
-					mCurLeft = mWidth;
-				}
-			}
-
 			String word = words[i];
 			float wordWidth = mPaint.measureText(word);
-			TextSpan span = createSpan(wordWidth, mTextHeight, word, TextSpan.TYPE_NONE_PART);
+			TextSpan span = createTextSpan(wordWidth, mTextHeight, word, TextSpan.TYPE_NONE_PART);
 			if (!line.addSpan(span)) {
 				//断字处理
 				if (Config.getStrategy() == Config.STRATEGY_HYPHENATION_ENABLE) {
@@ -136,21 +124,8 @@ public class Layout {
 					line.height += Config.getLineSpacing();
 					line.justify();
 
-					if (mCurLeft >= mWidth) {
-						curLineBottom = line.top + line.height;
-						mCurLeft = 0;
-					} else {
-						curLineBottom = line.top;
-					}
-
-					line = new Line(curLineBottom, mCurLeft, mWidth - mCurLeft, mTextHeight);
-					lines.add(line);
-					if (blocks != null) {
-						calLineWidth(line, blocks);
-						mCurLeft = Math.max(mCurLeft, line.left + line.width);
-					} else {
-						mCurLeft = mWidth;
-					}
+					line = new Line(mWidth, mTextHeight);
+					paragraph.addLine(line);
 
 					if (isAdded) {
 						String tailwordPart = "";
@@ -159,25 +134,12 @@ public class Layout {
 						}
 						if (!tailwordPart.isEmpty()) {
 							float wordPartWidth = mPaint.measureText(tailwordPart);
-							span = createSpan(wordPartWidth, mTextHeight, tailwordPart, TextSpan.TYPE_RIGHT_PART);
+							span = createTextSpan(wordPartWidth, mTextHeight, tailwordPart, TextSpan.TYPE_RIGHT_PART);
 
 							while (!line.addSpan(span)) {
 								line.height += Config.getLineSpacing();
-								if (mCurLeft >= mWidth) {
-									curLineBottom = line.top + line.height;
-									mCurLeft = 0;
-								} else {
-									curLineBottom = line.top;
-								}
-
-								line = new Line(curLineBottom, mCurLeft, mWidth - mCurLeft, mTextHeight);
-								lines.add(line);
-								if (blocks != null) {
-									calLineWidth(line, blocks);
-									mCurLeft = Math.max(mCurLeft, line.left + line.width);
-								} else {
-									mCurLeft = mWidth;
-								}
+								line = new Line(mWidth, mTextHeight);
+								paragraph.addLine(line);
 							}
 						}
 					} else {
@@ -188,59 +150,18 @@ public class Layout {
 
 		}
 
-
-		Paragraph paragraph = new Paragraph();
-		paragraph.lines = lines;
-		paragraph.blocks = blocks;
 		return paragraph;
 	}
 
-	private TextSpan createSpan(float width, float height, String text, int whichPart) {
+	private TextSpan createTextSpan(float width, float height, String text, int whichPart) {
 		TextSpan span = new TextSpan();
 		span.width = width;
 		span.height = height;
 		span.text = text;
 		span.whichPart = whichPart;
-
 		return span;
 	}
 
 
-	private boolean isRectOverlap(Rect r1, Rect r2) {
-		int minX = Math.max(r1.left, r2.left);
-		int minY = Math.max(r1.top, r2.top);
-		int maxX = Math.min(r1.right, r2.right);
-		int maxY = Math.min(r1.bottom, r2.bottom);
-
-		return !(minX > maxX || minY > maxY);
-	}
-
-	/**
-	 * calculate the line's width
-	 *
-	 * @param line
-	 * @param blocks
-	 */
-	private void calLineWidth(Line line, List<Block> blocks) {
-		for (Block block : blocks) {
-
-			mRect1.set((int) block.left, (int) block.top, (int) (block.left + block.width), (int) (block.top + block.height));
-			mRect2.set((int) line.left, (int) line.top, (int) (line.left + line.width), (int) (line.top + line.height));
-			if (!isRectOverlap(mRect1, mRect2)) {
-				continue;
-			}
-			if (line.left < block.left) {
-				line.width = block.left - line.left;
-				line.remainedWidth = line.width;
-				mCurLeft = block.left + block.width;
-			} else {
-				line.left = Math.max(line.left, block.left + block.width);
-				line.width = Math.max(0, mWidth - (block.left + block.width));
-				line.remainedWidth = line.width;
-				mCurLeft = line.left + line.width;
-			}
-		}
-	}
-
-
 }
+
