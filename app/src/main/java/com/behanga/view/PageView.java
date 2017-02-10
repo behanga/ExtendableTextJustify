@@ -26,7 +26,7 @@ import java.util.List;
 public class PageView extends View {
 	private Layout mLayout;
 	private boolean isMeasured;
-	private Page mPage = null;
+	public Page mPage = null;
 	private Paint mPaint;
 
 	public PageView(Context context) {
@@ -110,8 +110,8 @@ public class PageView extends View {
 			imageBlock2.height = drawable1.getIntrinsicHeight() / 4;
 			imageBlock2.left = 780;
 			imageBlock2.top = 100;
-			imageBlock2.setDrawable(drawable3);
-			imageBlocks1.add(imageBlock2);
+//			imageBlock2.setDrawable(drawable3);
+//			imageBlocks1.add(imageBlock2);
 
 			List<Block> imageBlocks2 = new ArrayList<>();
 			ImageBlock imageBlocka = new ImageBlock();

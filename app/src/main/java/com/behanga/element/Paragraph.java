@@ -79,6 +79,7 @@ public class Paragraph extends Element {
 		} else {
 			mCurLeft = width;
 		}
+		line.setParagraphObserver(this);
 		lines.add(line);
 	}
 

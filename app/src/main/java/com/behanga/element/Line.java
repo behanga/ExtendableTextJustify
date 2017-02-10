@@ -14,6 +14,8 @@ import java.util.List;
  */
 
 public class Line extends Element {
+	private Paragraph mParagraph;
+
 	public List<Span> spans = new ArrayList<>();
 	public float remainedWidth;
 
@@ -28,6 +30,10 @@ public class Line extends Element {
 	@Override
 	public void notifyChange() {
 
+	}
+
+	public void setParagraphObserver(Paragraph paragraph) {
+		this.mParagraph = paragraph;
 	}
 
 	@Override
@@ -54,18 +60,34 @@ public class Line extends Element {
 
 
 	public boolean addSpan(Span span) {
+		return addSpan(-1, span);
+	}
+
+	public boolean addSpan(int index, Span span) {
+		if (index > spans.size()) {
+			return false;
+		}
 
 		int wordSpacingWidth = Config.getWordSpacing();
 		if (span.width <= remainedWidth) {  //正常能装入到line中
-			span.left = this.left + width - remainedWidth;
+			if (index < spans.size() || index > 0) {
+				span.left = spans.get(index).left;
+				spans.add(index, span);
+				for (int i = index + 1; i < spans.size(); i++) {
+					spans.get(index).left += span.width;
+				}
+			} else {
+				span.left = this.left + width - remainedWidth;
+				spans.add(span);
+			}
+
 			this.height = Math.max(span.height, this.height);
-			this.spans.add(span);
+			span.setLineObserver(this);
 			remainedWidth -= (span.width + wordSpacingWidth);
 			return true;
 		} else {
 			return false;
 		}
-
 
 	}
 

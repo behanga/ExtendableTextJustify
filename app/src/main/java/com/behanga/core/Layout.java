@@ -18,7 +18,6 @@ import java.util.List;
 
 public class Layout {
 	private int mWidth;
-	private String mSource;
 	private Paint mPaint;
 	private int mTextHeight;
 	private Hyphenator mHyphenator;
@@ -52,7 +51,7 @@ public class Layout {
 	}
 
 	/**
-	 * 纯文字测量
+	 * only text measure
 	 *
 	 * @param source
 	 */
@@ -67,9 +66,7 @@ public class Layout {
 	 * @param spans
 	 */
 	public Paragraph measure(List<Span> spans) {
-
-
-		return null;
+		return measure(null, spans);
 	}
 
 
@@ -86,6 +83,11 @@ public class Layout {
 	}
 
 
+	/**
+	 * text and img measure
+	 *
+	 * @param source
+	 */
 	private Paragraph measureEn(String source, List<Block> blocks) {
 		int hyphenWidth = (int) mPaint.measureText("-");
 		String[] words = source.split("\\s");
