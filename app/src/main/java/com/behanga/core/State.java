@@ -2,6 +2,7 @@ package com.behanga.core;
 
 import android.support.annotation.IntDef;
 
+import com.behanga.element.Element;
 import com.behanga.element.Span;
 
 import java.lang.annotation.Retention;
@@ -23,9 +24,13 @@ public class State {
 	public @interface StateChange {
 	}
 
-	public StateChange width;
-	public StateChange height;
+	public
+	@StateChange
+	int widthChangeType;
+	public
+	@StateChange
+	int heightChangeType;
 	public List<Span> changedList = new ArrayList<>();
-
+	public Element beginer;
 
 }

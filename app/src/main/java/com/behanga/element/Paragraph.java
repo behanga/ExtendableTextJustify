@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 
 import com.behanga.core.Config;
+import com.behanga.core.State;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +28,12 @@ public class Paragraph extends Element {
 
 
 	@Override
-	public void notifyChange() {
-
+	public void notifyChange(State state) {
+		if (state.beginer instanceof Block) {
+			handlerBlockChange();
+		} else if (state.beginer instanceof Line) {
+			handlerLineChange((Line) state.beginer);
+		}
 	}
 
 	@Override
@@ -143,4 +148,22 @@ public class Paragraph extends Element {
 		}
 
 	}
+
+	private void handlerBlockChange() {
+		mCurLeft = 0;
+		for (Line line : lines) {
+			calLineWidth(line, blocks);
+
+		}
+	}
+
+
+	private void handlerLineChange(Line beginer) {
+		for (Line line : lines) {
+			if (line.equals(beginer)) {
+
+			}
+		}
+	}
+
 }

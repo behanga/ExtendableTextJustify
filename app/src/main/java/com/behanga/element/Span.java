@@ -4,6 +4,8 @@ package com.behanga.element;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.behanga.core.State;
+
 /**
  * Created by lichen8974@gmail.com on 2016/12/29.
  */
@@ -22,9 +24,10 @@ public abstract class Span extends Element {
 
 	public abstract void draw(Canvas canvas, Paint paint, float left, float top, float right, float bottom);
 
-	public void notifyChanged() {
+
+	public void notifyChanged(State state) {
 		if (mLine != null) {
-			mLine.notifyChange();
+			mLine.notifyChange(state);
 		}
 	}
 

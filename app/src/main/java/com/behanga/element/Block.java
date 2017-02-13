@@ -3,6 +3,8 @@ package com.behanga.element;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.behanga.core.State;
+
 /**
  * Created by lichen8974@gmail.com on 2016/12/29.
  */
@@ -18,9 +20,9 @@ public class Block extends Element {
 	}
 
 	@Override
-	public void notifyChange() {
+	public void notifyChange(State state) {
 		if (mParagraph != null) {
-			mParagraph.notifyChange();
+			mParagraph.notifyChange(state);
 		}
 	}
 

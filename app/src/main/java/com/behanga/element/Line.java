@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import com.behanga.core.Config;
+import com.behanga.core.State;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,10 @@ import java.util.List;
  */
 
 public class Line extends Element {
-	private Paragraph mParagraph;
-
 	public List<Span> spans = new ArrayList<>();
-	public float remainedWidth;
+
+	private Paragraph mParagraph;
+	private float remainedWidth;
 
 
 	public Line(float width, float height) {
@@ -28,8 +29,8 @@ public class Line extends Element {
 
 
 	@Override
-	public void notifyChange() {
-		mParagraph.notifyChange();
+	public void notifyChange(State state) {
+		mParagraph.notifyChange(state);
 	}
 
 	public void setParagraphObserver(Paragraph paragraph) {
