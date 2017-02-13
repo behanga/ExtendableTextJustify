@@ -64,13 +64,9 @@ public class Line extends Element {
 	}
 
 	public boolean addSpan(int index, Span span) {
-		if (index > spans.size()) {
-			return false;
-		}
-
 		int wordSpacingWidth = Config.getWordSpacing();
 		if (span.width <= remainedWidth) {  //正常能装入到line中
-			if (index < spans.size() || index > 0) {
+			if (index > 0 && index < spans.size()) {
 				span.left = spans.get(index).left;
 				spans.add(index, span);
 				for (int i = index + 1; i < spans.size(); i++) {
