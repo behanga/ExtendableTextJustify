@@ -31,5 +31,5 @@
         android:id="@+id/add_text"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="add text"/>
+        android:text="change image size"/>
 </LinearLayout>

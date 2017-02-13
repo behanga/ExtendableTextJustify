@@ -29,7 +29,7 @@ public class Line extends Element {
 
 	@Override
 	public void notifyChange() {
-
+		mParagraph.notifyChange();
 	}
 
 	public void setParagraphObserver(Paragraph paragraph) {

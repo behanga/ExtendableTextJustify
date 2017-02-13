@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.behanga.element.ImageBlock;
 import com.behanga.view.PageView;
 
 
@@ -24,7 +25,10 @@ public class MainActivity extends AppCompatActivity {
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-//				mPageView.mPage.paragraphs.get(0).lines.get(0).addSpan(0,);
+				ImageBlock block = (ImageBlock) mPageView.mPage.paragraphs.get(0).blocks.get(0);
+				block.width = block.width * 2;
+				block.height = block.height * 2;
+				block.notifyChange();
 			}
 		});
 	}

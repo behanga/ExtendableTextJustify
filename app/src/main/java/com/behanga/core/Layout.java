@@ -93,7 +93,10 @@ public class Layout {
 		String[] words = source.split("\\s");
 		Paragraph paragraph = new Paragraph(mWidth);
 		if (blocks != null) {
-			paragraph.blocks.addAll(blocks);
+			for (Block block : blocks) {
+				block.setParagraphObserver(paragraph);
+				paragraph.blocks.add(block);
+			}
 		}
 
 		Line line = new Line(mWidth, mTextHeight);//第一行
