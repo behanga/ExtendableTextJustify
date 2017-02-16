@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity {
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ImageBlock block = (ImageBlock) mPageView.mPage.paragraphs.get(0).blocks.get(0);
-				block.width = block.width * 2;
-				block.height = block.height * 2;
+				ImageBlock block = (ImageBlock) mPageView.mPage.paragraphs.get(0).blocks.get(1);
+				block.width += 100;
+				block.height += 100;
 				State state = new State();
 				state.widthChangeType = State.INCREASE;
 				state.heightChangeType = State.INCREASE;

@@ -9,6 +9,7 @@ import com.behanga.core.Config;
 import com.behanga.core.State;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -17,7 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 
 public class Line extends Element {
-	public List<Span> spans = new CopyOnWriteArrayList<>();
+	public List<Span> spans = new ArrayList<>();
 	private Rect mRect1 = new Rect();
 	private Rect mRect2 = new Rect();
 	private Paragraph mParagraph;
@@ -56,11 +57,12 @@ public class Line extends Element {
 		for (int i = 0; i < mFragmentList.size(); i++) {
 			Fragment fragment = mFragmentList.get(i);
 			float sum = 0;
-			for (int j = spanCount; j < spanCount + fragment.count; j++) {
+			int count = Math.min(spans.size(), spanCount + fragment.count);
+			for (int j = spanCount; j < count; j++) {
 				sum += spans.get(j).width;
 			}
 			float spacingWidth = (fragment.width - sum) / (fragment.count - 1);
-			for (int index = spanCount + 1; index < spanCount + fragment.count; index++) {
+			for (int index = spanCount + 1; index < count; index++) {
 				spans.get(index).left += (spacingWidth - Config.getWordSpacing()) * (index - spanCount);
 			}
 			spanCount += fragment.count;
@@ -99,25 +101,35 @@ public class Line extends Element {
 
 	}
 
-	public State onUpdate() {
-//		remainedWidth = width;
-		State state = new State();
-//		int index = 0;
-//		int wordSpacingWidth = Config.getWordSpacing();
-//		for (int i = 0; i < spans.size(); i++) {
-//			Span span = spans.get(i);
-//			if (span.width <= remainedWidth) {
-//				span.left = this.left + width - remainedWidth;
-//				remainedWidth -= (span.width + wordSpacingWidth);
-//			} else {
-//				index = i;
-//				state.changedList = spans.subList(index, spans.size());
-//				spans.removeAll(state.changedList);
-//				justify();
-//				break;
-//			}
-//		}
+	public State onUpdate(State state) {
+		if (state == null) {
+			state = new State();
+			state.widthChangeType = State.NO_CHANGE;
+			state.heightChangeType = State.NO_CHANGE;
+		}
+		int index = 0;
+		int wordSpacingWidth = Config.getWordSpacing();
 
+		if (state.changedList != null && !state.changedList.isEmpty()) {
+			spans.addAll(0, state.changedList);
+		}
+
+		for (int i = 0; i < mFragmentList.size(); i++) {
+			Fragment fragment = mFragmentList.get(i);
+			fragment.remainedWidth = fragment.width;
+			for (; index < spans.size(); index++) {
+				Span span = spans.get(index);
+				if (span.width <= fragment.remainedWidth) {
+					span.left = fragment.left + fragment.width - fragment.remainedWidth;
+					fragment.remainedWidth -= (span.width + wordSpacingWidth);
+					fragment.count++;
+				} else {
+					break;
+				}
+			}
+		}
+		state.changedList = new ArrayList<>(spans.subList(index, spans.size()));
+		spans.removeAll(state.changedList);
 		return state;
 	}
 
@@ -129,6 +141,7 @@ public class Line extends Element {
 	 */
 	public void calWidth(List<Block> blocks) {
 		mCurLeft = this.left;
+		mFragmentList.clear();
 		while (mCurLeft < width) {
 			Fragment fragment = new Fragment(mCurLeft, width - mCurLeft);
 			mFragmentList.add(fragment);

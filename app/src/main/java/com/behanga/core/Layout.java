@@ -154,6 +154,7 @@ public class Layout {
 			}
 
 		}
+		line.justify();
 
 		return paragraph;
 	}

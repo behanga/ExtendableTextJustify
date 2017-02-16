@@ -104,11 +104,33 @@ public class Paragraph extends Element {
 
 
 	private void handlerBlockChange() {
-
-		for (Line line : lines) {
-//			calLineWidth(line, blocks);
-			line.onUpdate();
+		State state = null;
+		for (int i = 0; i < lines.size(); i++) {
+			Line line = lines.get(i);
+			if (blocks != null) {
+				line.calWidth(blocks);
+			}
+			state = line.onUpdate(state);
+			if (i != (lines.size() - 1) || !state.changedList.isEmpty()) {
+				line.justify();
+			}
 		}
+		if (!state.changedList.isEmpty()) {
+			float height = state.changedList.get(0).height;
+			Line line = new Line(width, height);
+			addLine(line);
+			for (int i = 0; i < state.changedList.size(); i++) {
+				Span span = state.changedList.get(i);
+				if (!line.addSpan(span)) {
+					line.height += Config.getLineSpacing();
+					line.justify();
+					line = new Line(width, height);
+					addLine(line);
+					i--;
+				}
+			}
+		}
+
 	}
 
 
