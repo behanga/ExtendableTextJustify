@@ -57,7 +57,7 @@ public class PageView extends View {
 		mLayout.setWidth(getMeasuredWidth());
 		String text1 = "We often speak to dogs and babies in a similar way" +
 				" Scientists have decoded \"dog-directed speech\" for the first time, and they say puppies respond to it. " +
-				"Puppies reacted positively and wanted to play when researchers played them a tape of phrases like, \"Who's a good boy?''\n" +
+				"Puppies reacted positively and wanted to play when researchers played them a tape of phrases like, \"Who's a good boy?\"" +
 				"\n" +
 				"However, the international team of researchers found that adult dogs ignored this kind of speech.\n";
 		String text2 = "When we talk to dogs, we often speak slowly in a high-pitched voice, similar to the way we talk to young babies. " +
@@ -127,13 +127,22 @@ public class PageView extends View {
 			imageBlocks1.add(imageBlocka);
 
 
-
-
 			long time = System.currentTimeMillis();
-			mPage.paragraphs.add(mLayout.measure(text1, imageBlocks1));
-			mPage.paragraphs.add(mLayout.measure(text2, imageBlocks2));
-			mPage.paragraphs.add(mLayout.measure(text3));
-			mPage.paragraphs.add(mLayout.measure(text4));
+			Paragraph paragraph1 = mLayout.measure(text1, imageBlocks1);
+			Paragraph paragraph2 = mLayout.measure(text2, imageBlocks2);
+			Paragraph paragraph3 = mLayout.measure(text3);
+			Paragraph paragraph4 = mLayout.measure(text4);
+			paragraph1.setPageObserver(mPage);
+			paragraph2.setPageObserver(mPage);
+			paragraph3.setPageObserver(mPage);
+			paragraph4.setPageObserver(mPage);
+
+			mPage.paragraphs.add(paragraph1);
+			mPage.paragraphs.add(paragraph2);
+			mPage.paragraphs.add(paragraph3);
+			mPage.paragraphs.add(paragraph4);
+
+			mPage.setPageView(this);
 			System.out.println("time:" + (System.currentTimeMillis() - time));
 			isMeasured = true;
 		}

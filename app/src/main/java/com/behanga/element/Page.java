@@ -3,6 +3,8 @@ package com.behanga.element;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.behanga.view.PageView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
 
 public class Page {
 	public List<Paragraph> paragraphs = new ArrayList<>();
+	private PageView mPageView;
 
 
 	public void draw(Canvas canvas, Paint paint, int left, int top, int right, int bottom) {
@@ -29,5 +32,13 @@ public class Page {
 		}
 
 		return height;
+	}
+
+	public void setPageView(PageView pageView) {
+		mPageView = pageView;
+	}
+
+	public void notifyChange() {
+		mPageView.invalidate();
 	}
 }

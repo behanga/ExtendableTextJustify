@@ -12,7 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 public class Config {
 
 	private static final int DEFAULT_LINE_SPACING = 10;
-	private static final int DEFAULT_WORD_SPACING = 20;
+	private static final int DEFAULT_WORD_SPACING = 15;
 	private static final int DEFAULT_PARAGRAPH_SPACING = 55;
 	private static final int DEFAULT_TEXT_SIZE = 55;
 	private static final int DEFAULT_TEXT_COLOR = 0xff123456;

@@ -3,6 +3,8 @@ package com.behanga.element;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import com.behanga.core.State;
+
 /**
  * Created by lichen8974@gmail.com on 2016/12/29.
  */
@@ -20,7 +22,7 @@ public class TextSpan extends Span {
 	}
 
 	@Override
-	public void notifyChange() {
+	public void notifyChange(State state) {
 
 	}
 
