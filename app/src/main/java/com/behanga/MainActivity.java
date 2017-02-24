@@ -10,6 +10,7 @@ import com.behanga.element.ImageBlock;
 import com.behanga.view.PageView;
 
 
+
 public class MainActivity extends AppCompatActivity {
 
 	private PageView mPageView;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
 		mButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ImageBlock block = (ImageBlock) mPageView.mPage.paragraphs.get(0).blocks.get(1);
+				ImageBlock block = (ImageBlock) mPageView.mPage.paragraphs.get(0).blocks.get(0);
 				block.width += 100;
 				block.height += 100;
 				State state = new State();
@@ -36,5 +37,7 @@ public class MainActivity extends AppCompatActivity {
 				block.notifyChange(state);
 			}
 		});
+
+
 	}
 }

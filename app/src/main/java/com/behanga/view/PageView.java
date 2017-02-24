@@ -55,6 +55,8 @@ public class PageView extends View {
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		mLayout.setWidth(getMeasuredWidth());
+
+		//For test
 		String text1 = "We often speak to dogs and babies in a similar way" +
 				" Scientists have decoded \"dog-directed speech\" for the first time, and they say puppies respond to it. " +
 				"Puppies reacted positively and wanted to play when researchers played them a tape of phrases like, \"Who's a good boy?\"" +
@@ -94,42 +96,39 @@ public class PageView extends View {
 				"The research is published in Proceedings of the Royal Society of London B- Biological Sciences.";
 		if (!isMeasured) {
 			mPage = new Page();
-			List<Block> imageBlocks1 = new ArrayList<>();
-			ImageBlock imageBlock1 = new ImageBlock();
+			List<Block> imageBlockList1 = new ArrayList<>();
+			List<Block> imageBlockList2 = new ArrayList<>();
 
+			ImageBlock imageBlock1 = new ImageBlock();
+			ImageBlock imageBlock2 = new ImageBlock();
+			ImageBlock imageBlock3 = new ImageBlock();
 
 			Drawable drawable1 = getResources().getDrawable(R.drawable.img3);
 			imageBlock1.width = drawable1.getIntrinsicWidth() / 4;
 			imageBlock1.height = drawable1.getIntrinsicHeight() / 4;
 			imageBlock1.setDrawable(drawable1);
-			imageBlocks1.add(imageBlock1);
+			imageBlockList1.add(imageBlock1);
 
-			ImageBlock imageBlock2 = new ImageBlock();
-			Drawable drawable3 = getResources().getDrawable(R.drawable.img4);
+			Drawable drawable2 = getResources().getDrawable(R.drawable.img4);
 			imageBlock2.width = drawable1.getIntrinsicWidth() / 4;
 			imageBlock2.height = drawable1.getIntrinsicHeight() / 4;
 			imageBlock2.left = 780;
 			imageBlock2.top = 100;
-//			imageBlock2.setDrawable(drawable3);
-//			imageBlocks1.add(imageBlock2);
+			imageBlock2.setDrawable(drawable2);
+			imageBlockList2.add(imageBlock2);
 
-			List<Block> imageBlocks2 = new ArrayList<>();
-			ImageBlock imageBlocka = new ImageBlock();
-			imageBlocka.left = 350;
-			imageBlocka.top = 500;
-			Drawable drawable2 = getResources().getDrawable(R.drawable.img2);
-			imageBlocka.width = drawable2.getIntrinsicWidth();
-			imageBlocka.height = drawable2.getIntrinsicHeight();
-
-			imageBlocka.setDrawable(drawable2);
-			imageBlocks2.add(imageBlocka);
-
-			imageBlocks1.add(imageBlocka);
+			Drawable drawable3 = getResources().getDrawable(R.drawable.img2);
+			imageBlock3.left = 350;
+			imageBlock3.top = 500;
+			imageBlock3.width = drawable3.getIntrinsicWidth();
+			imageBlock3.height = drawable3.getIntrinsicHeight();
+			imageBlock3.setDrawable(drawable3);
+			imageBlockList1.add(imageBlock3);
 
 
 			long time = System.currentTimeMillis();
-			Paragraph paragraph1 = mLayout.measure(text1, imageBlocks1);
-			Paragraph paragraph2 = mLayout.measure(text2, imageBlocks2);
+			Paragraph paragraph1 = mLayout.measure(text1, imageBlockList1);
+			Paragraph paragraph2 = mLayout.measure(text2, imageBlockList2);
 			Paragraph paragraph3 = mLayout.measure(text3);
 			Paragraph paragraph4 = mLayout.measure(text4);
 			paragraph1.setPageObserver(mPage);
